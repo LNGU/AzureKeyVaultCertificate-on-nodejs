@@ -14,13 +14,13 @@ const secretClient = new SecretClient(url, credential);
 
 async function getCertKey() { 
     certificateName = process.env.KEY_VAULT_CERT_NAME_DEV;
-    fetchedCertificate = await secretClient.getSecret(certificateName);
+    fetchedCertificate = await secretClient.getSecret(certificateName); //to pass certificate as a buffer needs getSecret not getCertificate.
     return fetchedCertificate.value;
 };
 
 getCertKey().then((res)=> {
     const options = {
-        pfx: new Buffer(res, 'base64'), // use Buffer.from on node.js version 10.0.0 or higher. this code works well with node.js version 8.9.4
+        pfx: new Buffer(res, 'base64'), // use Buffer.from on node.js version 10.0.0 or higher. this code works well with node.js version 8.9.4.
         passphrase : '', //Azure Key Vault does not provide password so you have to leave it blank for it to work. if you specify a password, you get mac verify failure error.
     }
     
